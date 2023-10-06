@@ -6,7 +6,7 @@ class Recipe(db.Model):
     description = db.Column(db.Text)
     ingredients = db.Column(db.Text)
     instructions = db.Column(db.Text)
-    category = db.Column(db.String(255)) 
+    category = db.Column(db.String(255))
     image = db.Column(db.String(255))
 
     def __init__(self, title, description, ingredients, instructions, category, image):

@@ -23,6 +23,7 @@ def get_recipes():
     recipes = get_all_recipes()
     recipes_list = [
         {
+            'id': recipe.id,
             'title': recipe.title,
             'description': recipe.description,
             'ingredients': recipe.ingredients,
