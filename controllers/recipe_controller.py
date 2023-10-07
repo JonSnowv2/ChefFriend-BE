@@ -7,15 +7,16 @@ from models.recipe import Recipe
 @app.route('/api/recipes/add', methods=['POST'])
 @cross_origin(origin="*")
 def create_recipe():
-    data = request.json  # Get JSON data from the request body
+    data = request.json  
     title = data.get('title')
     description = data.get('description')
     ingredients_list = data.get('ingredients')
-    instructions = data.get('instructions')
+    instructions_list = data.get('instructions')
     category = data.get('category')
     image = data.get('image')
 
-    ingredients = ', '.join(ingredients_list)
+    ingredients = ','.join(ingredients_list)
+    instructions = ','.join(instructions_list)
 
     if title is None or description is None or ingredients is None or instructions is None or category is None or image is None:
         return jsonify({'error': 'Missing required data in the request'}), 400
