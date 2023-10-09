@@ -1,7 +1,12 @@
-from flask import current_app, jsonify, request
+from flask import current_app, jsonify, request, g
 from flask_cors import cross_origin
 from config import db, app
 from models.recipe import Recipe 
+from models.user import User
+from authentication_service.authentication import login
+
+def get_all_recipes():
+    return Recipe.query.all()
 
 
 @app.route('/api/recipes/add', methods=['POST'])
@@ -14,6 +19,12 @@ def create_recipe():
     instructions_list = data.get('instructions')
     category = data.get('category')
     image = data.get('image')
+
+    user = g.user
+
+    if not user:
+        return jsonify({'error': 'User not authenticated'}), 401
+
 
     ingredients = ','.join(ingredients_list)
     instructions = ','.join(instructions_list)
@@ -28,20 +39,24 @@ def create_recipe():
             ingredients=ingredients,
             instructions=instructions,
             category=category,
-            image=image
+            image=image,
+            user_username=user.username
         )
         db.session.add(new_recipe)
         db.session.commit()
 
     return jsonify({'message': 'Recipe created successfully'}), 200
 
-def get_all_recipes():
-    return Recipe.query.all()
-
 @app.route('/api/recipes', methods=['GET'])
 @cross_origin(origin="*")
 def get_recipes():
-    recipes = get_all_recipes()
+    print(g.user)
+    user = g.user
+    if not user:
+        return jsonify({'error': 'User not authenticated'}), 401
+    
+    recipes = Recipe.query.filter_by(user_username=user.username).all()
+
     recipes_list = [
         {
             'id': recipe.id,
@@ -50,7 +65,8 @@ def get_recipes():
             'ingredients': recipe.ingredients,
             'instructions': recipe.instructions,
             'category': recipe.category,
-            'image': recipe.image
+            'image': recipe.image,
+            'user_username': recipe.user_username
         }
         for recipe in recipes
     ]

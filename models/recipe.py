@@ -1,4 +1,5 @@
 from config import db
+from sqlalchemy.orm import relationship
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,12 +9,13 @@ class Recipe(db.Model):
     instructions = db.Column(db.Text)
     category = db.Column(db.String(255))
     image = db.Column(db.String(255))
+    user_username = db.Column(db.String, db.ForeignKey('user.username'), nullable=False)
 
-    def __init__(self, title, description, ingredients, instructions, category, image):
+    def __init__(self, title, description, ingredients, instructions, category, image, user_username):
         self.title = title
         self.description = description
         self.ingredients = ingredients
         self.instructions = instructions
         self.category = category
         self.image = image
-
+        self.user_username = user_username

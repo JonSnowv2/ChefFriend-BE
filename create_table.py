@@ -1,24 +1,52 @@
 import sqlite3
 
-def create_table():
-    conn = sqlite3.connect('recipes.db')
+def create_tables():
+    db_file = 'database.db'
+    print(f"Using database file: {db_file}")
+
+    conn = sqlite3.connect(db_file) 
 
     c = conn.cursor()
 
-    c.execute("""CREATE TABLE IF NOT EXISTS recipe (
-              title TEXT,
-              description TEXT,
-              ingredients TEXT,
-              instructions TEXT,
-              category TEXT,
-              image TEXT
-    )""")
+    create_table_sql_user = '''
+    CREATE TABLE IF NOT EXISTS user (
+        username TEXT PRIMARY KEY,
+        name TEXT,
+        password TEXT,
+        pfp TEXT
+    )
+    '''
+
+    create_table_sql_recipe = '''
+    CREATE TABLE IF NOT EXISTS recipe (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        description TEXT,
+        ingredients TEXT,
+        instructions TEXT,
+        category TEXT,
+        image TEXT,
+        user_username TEXT,  
+        FOREIGN KEY (user_username) REFERENCES user (username)
+    )
+    '''
+
+    c.execute(create_table_sql_user)
+    c.execute(create_table_sql_recipe)
 
     conn.commit()
 
-    c.execute("INSERT INTO recipe (title, description, ingredients, instructions, category, image) VALUES (?, ?, ?, ?, ?, ?)",
-            ("spaghetti", "this is the description", "ingredients", "instructions", "category", "image"))
+    conn.close()
 
+
+def drop_table():
+    conn = sqlite3.connect('database.db')
+
+    c = conn.cursor()
+
+    c.execute('DROP TABLE IF EXISTS recipe')
+    c.execute('DROP TABLE IF EXISTS user')
+    
     conn.commit()
 
     conn.close()
