@@ -4,6 +4,7 @@ from config import db, app
 from models.user import User
 from passlib.hash import scrypt
 from controllers.user_controller import add_user
+from flask_jwt_extended import create_access_token
 
 @app.route('/register', methods=['POST'])
 @cross_origin(origin="*")
@@ -41,9 +42,8 @@ def login():
                     'password': user.password,
                     'recipes': user.recipes
                 }
-                g.user = user
-                print(g.user)
-                return jsonify({'user': user_data}), 200
+                access_token = create_access_token(identity=user.username)
+                return jsonify(access_token=access_token), 200
             return jsonify({'message': 'Invalid username or password'}), 401
 
     return jsonify({'message': 'Welcome to the login page'}), 200
