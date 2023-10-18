@@ -83,3 +83,25 @@ def delete_recipe(recipe_id):
     else:
         return jsonify({'error': 'Recipe not found'}), 404
     
+@app.route('/api/get_all_recipes')
+@cross_origin(origin="*")
+def get_all_recipes():
+    recipes = Recipe.query.all()
+    recipes_list = [
+        {
+            'id': recipe.id,
+            'title': recipe.title,
+            'description': recipe.description,
+            'ingredients': recipe.ingredients,
+            'instructions': recipe.instructions,
+            'category': recipe.category,
+            'image': recipe.image,
+            'user_username': recipe.user_username
+        }
+        for recipe in recipes
+    ]
+    return jsonify(recipes_list)
+
+
+
+    

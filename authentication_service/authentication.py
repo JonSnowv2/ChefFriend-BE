@@ -5,6 +5,7 @@ from models.user import User
 from passlib.hash import scrypt
 from controllers.user_controller import add_user
 from flask_jwt_extended import create_access_token
+from controllers.serialize_recipe import serialize_recipe
 
 @app.route('/register', methods=['POST'])
 @cross_origin(origin="*")
@@ -20,6 +21,10 @@ def register():
         except Exception as e:
             return jsonify({'message': str(e)}), 500
 
+from flask import jsonify
+
+# ...
+
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin(origin="*")
 def login():
@@ -28,7 +33,7 @@ def login():
 
         if not data or 'username' not in data or 'password' not in data:
             return jsonify({'message': 'Invalid request'}), 400
-        
+
         username = data['username']
         password = data['password']
 
@@ -40,10 +45,16 @@ def login():
                     'username': user.username,
                     'name': user.name,
                     'password': user.password,
-                    'recipes': user.recipes
+                    'recipes': [serialize_recipe(recipe) for recipe in user.recipes]
                 }
                 access_token = create_access_token(identity=user.username)
-                return jsonify(access_token=access_token), 200
+                response_data = {
+                    'user': user_data,
+                    'access_token': access_token
+                }
+                return jsonify(response_data), 200
             return jsonify({'message': 'Invalid username or password'}), 401
 
     return jsonify({'message': 'Welcome to the login page'}), 200
+
+

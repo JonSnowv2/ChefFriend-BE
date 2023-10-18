@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_cors import cross_origin
 from config import db, app
 from models.user import User
@@ -21,8 +21,22 @@ def get_all_users():
             'username': user.username,
             'name': user.name,
             'password': user.password,
-            'recipes': user.recipes,
+            'recipes': [recipe.id for recipe in user.recipes],
         }
         user_list.append(user_data)
     
     return jsonify(user_list), 200
+
+@app.route('/api/username_exists', methods=["GET", "POST"])
+@cross_origin(origin="*")
+def search_user_exist():
+    username = request.form.get('username')
+
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        response = {'exists': True}
+    else:
+        response = {'exists': False}
+
+    return jsonify(response), 200
