@@ -8,4 +8,5 @@ def serialize_recipe(recipe):
         'category': recipe.category,
         'image': recipe.image,
         'user_username': recipe.user_username,
+        'public': recipe.public,
     }

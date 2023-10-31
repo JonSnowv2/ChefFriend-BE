@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b1a3a82-7c7f-4c17-bef8-0f050f564156" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authentication_service/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/authentication_service/authentication.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/recipe_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/recipe_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/recipe_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/recipe_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/serialize_recipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/serialize_recipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/user_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/recipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/recipe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

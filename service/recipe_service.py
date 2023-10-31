@@ -25,6 +25,7 @@ def create_recipe():
     instructions_list = data.get('instructions')
     category = data.get('category')
     image = data.get('image')
+    public = data.get('public')
 
     user_username = protected_routes()
 
@@ -42,7 +43,8 @@ def create_recipe():
             instructions=instructions,
             category=category,
             image=image,
-            user_username=user_username
+            public=public,
+            user_username=user_username,
         )
         db.session.add(new_recipe)
         db.session.commit()
@@ -65,7 +67,8 @@ def get_recipes():
             'instructions': recipe.instructions,
             'category': recipe.category,
             'image': recipe.image,
-            'user_username': recipe.user_username
+            'public': recipe.public,
+            'user_username': recipe.user_username,
         }
         for recipe in recipes
     ]
@@ -96,11 +99,72 @@ def get_all_recipes():
             'instructions': recipe.instructions,
             'category': recipe.category,
             'image': recipe.image,
-            'user_username': recipe.user_username
+            'user_username': recipe.user_username,
+            'public': recipe.public,
         }
         for recipe in recipes
     ]
     return jsonify(recipes_list)
+
+@app.route('/api/get_public_recipes', methods=['GET'])
+@cross_origin(origin="*")
+def return_public_recipes():
+    recipes = Recipe.query.filter_by(public=1)
+    recipes_list = [
+        {
+            'id': recipe.id,
+            'title': recipe.title,
+            'description': recipe.description,
+            'ingredients': recipe.ingredients,
+            'instructions': recipe.instructions,
+            'category': recipe.category,
+            'image': recipe.image,
+            'user_username': recipe.user_username,
+            'public': recipe.public,
+        }
+        for recipe in recipes
+    ]
+
+    return jsonify(recipes_list)
+
+@app.route('/api/get_recipes_by_id', methods=['GET', 'POST'])
+@cross_origin(origin='*')
+def get_recipes_by_id():
+    data = request.get_json()
+
+    if data is None:
+        return jsonify({'error': 'Invalid JSON data in the request'}), 400
+
+    list_ids = data.get('ids')
+
+    if not list_ids:
+        return jsonify({'message': 'No ids provided'}), 400
+
+    recipes = Recipe.query.filter(Recipe.id.in_(list_ids)).all()
+
+    recipes_list = [
+        {
+            'id': recipe.id,
+            'title': recipe.title,
+            'description': recipe.description,
+            'ingredients': recipe.ingredients,
+            'instructions': recipe.instructions,
+            'category': recipe.category,
+            'image': recipe.image,
+            'user_username': recipe.user_username,
+            'public': recipe.public,
+        }
+        for recipe in recipes
+    ]
+
+    return jsonify(recipes_list), 200
+
+def print_schema():
+    table = Recipe.__table__
+    for column in table.columns:
+        print(f"Table: {table.name}, Column: {column.name}, Type: {column.type}")
+
+
 
 
 

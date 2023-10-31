@@ -3,9 +3,9 @@ from flask_cors import cross_origin
 from config import db, app
 from models.user import User
 from passlib.hash import scrypt
-from controllers.user_controller import add_user
+from service.user_service import add_user
 from flask_jwt_extended import create_access_token
-from controllers.serialize_recipe import serialize_recipe
+from service.serialize_recipe import serialize_recipe
 
 @app.route('/register', methods=['POST'])
 @cross_origin(origin="*")
@@ -41,13 +41,15 @@ def login():
 
         if user:
             if scrypt.verify(password, user.password):
+                access_token = create_access_token(identity=user.username)
+                user.access_token = access_token
+                db.session.commit()
                 user_data = {
                     'username': user.username,
                     'name': user.name,
                     'password': user.password,
                     'recipes': [serialize_recipe(recipe) for recipe in user.recipes]
                 }
-                access_token = create_access_token(identity=user.username)
                 response_data = {
                     'user': user_data,
                     'access_token': access_token
