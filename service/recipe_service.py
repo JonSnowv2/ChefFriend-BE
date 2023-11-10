@@ -26,11 +26,9 @@ def create_recipe():
     category = data.get('category')
     image = data.get('image')
     public = data.get('public')
+    time_taken = data.get('time_taken')
 
     user_username = protected_routes()
-
-    if title is None or description is None or ingredients_list is None or instructions_list is None or category is None or image is None:
-        return jsonify({'error': 'Missing required data in the request'}), 400
 
     ingredients = ','.join(ingredients_list)
     instructions = ','.join(instructions_list)
@@ -45,6 +43,7 @@ def create_recipe():
             image=image,
             public=public,
             user_username=user_username,
+            time_taken=time_taken,
         )
         db.session.add(new_recipe)
         db.session.commit()
@@ -69,6 +68,7 @@ def get_recipes():
             'image': recipe.image,
             'public': recipe.public,
             'user_username': recipe.user_username,
+            'time_taken': recipe.time_taken,
         }
         for recipe in recipes
     ]
@@ -101,6 +101,7 @@ def get_all_recipes():
             'image': recipe.image,
             'user_username': recipe.user_username,
             'public': recipe.public,
+            'time_taken': recipe.time_taken,
         }
         for recipe in recipes
     ]
@@ -121,6 +122,7 @@ def return_public_recipes():
             'image': recipe.image,
             'user_username': recipe.user_username,
             'public': recipe.public,
+            'time_taken': recipe.time_taken,
         }
         for recipe in recipes
     ]
@@ -129,7 +131,7 @@ def return_public_recipes():
 
 @app.route('/api/get_recipes_by_id', methods=['GET', 'POST'])
 @cross_origin(origin='*')
-def get_recipes_by_id():
+def get_recipes_by_ids():
     data = request.get_json()
 
     if data is None:
@@ -140,7 +142,7 @@ def get_recipes_by_id():
     if not list_ids:
         return jsonify({'message': 'No ids provided'}), 400
 
-    recipes = Recipe.query.filter(Recipe.id.in_(list_ids)).all()
+    recipes = Recipe.query.filter(Recipe.id.in_(list_ids), Recipe.public==1).all()
 
     recipes_list = [
         {
@@ -153,6 +155,7 @@ def get_recipes_by_id():
             'image': recipe.image,
             'user_username': recipe.user_username,
             'public': recipe.public,
+            'time_taken': recipe.time_taken,
         }
         for recipe in recipes
     ]

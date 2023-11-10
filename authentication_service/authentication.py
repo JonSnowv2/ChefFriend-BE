@@ -44,11 +44,13 @@ def login():
                 access_token = create_access_token(identity=user.username)
                 user.access_token = access_token
                 db.session.commit()
+                print(user.favorite_recipes)
                 user_data = {
                     'username': user.username,
                     'name': user.name,
                     'password': user.password,
-                    'recipes': [serialize_recipe(recipe) for recipe in user.recipes]
+                    'recipes': [recipe.id for recipe in user.recipes],
+                    'favorites_list': [recipe.id for recipe in user.favorite_recipes],
                 }
                 response_data = {
                     'user': user_data,
