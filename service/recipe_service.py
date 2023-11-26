@@ -86,6 +86,45 @@ def delete_recipe(recipe_id):
     else:
         return jsonify({'error': 'Recipe not found'}), 404
     
+@app.route('/api/edit_recipe', methods=['POST'])
+@cross_origin(origin="*")
+def edit_recipe():
+    try:
+        data = request.json
+
+        id = data.get('id')
+        id = int(id)
+
+        recipe = Recipe.query.filter_by(id=id).first()
+
+        new_title = data.get('new_title')
+        new_description = data.get('new_description')
+        new_category = data.get('new_category')
+        new_public = data.get('new_public')
+        new_time_taken = data.get('new_time_taken')
+
+        new_ingredients = data.get('new_ingredients')
+        new_ingredients_list = ','.join(new_ingredients)
+
+        new_instructions = data.get('new_instructions')
+        new_instructions_list = ','.join(new_instructions)
+
+        recipe.title = new_title
+        recipe.description = new_description
+        recipe.category = new_category
+        recipe.public = new_public
+        recipe.time_taken = new_time_taken
+        recipe.ingredients = new_ingredients_list
+        recipe.instructions = new_instructions_list
+
+        db.session.commit()
+
+        return jsonify({'message': 'successfull'}), 200
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'message': 'something went wrong'}), 400
+        
 @app.route('/api/get_all_recipes')
 @cross_origin(origin="*")
 def get_all_recipes():

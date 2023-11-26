@@ -23,8 +23,6 @@ def register():
 
 from flask import jsonify
 
-# ...
-
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin(origin="*")
 def login():
@@ -61,4 +59,25 @@ def login():
 
     return jsonify({'message': 'Welcome to the login page'}), 200
 
+@app.route('/logout', methods=['POST'])
+@cross_origin(origins="*")
+def logout():
+    try:
+        data = request.get_json()
+
+        token = data['token']
+
+        user = User.query.filter_by(access_token=token).first()
+
+        if not user:
+            return jsonify({'message': 'user with token not found'}), 404
+        
+        user.token = None
+
+        db.session.commit()
+        return jsonify({'message': 'successful'}), 200
+    
+    except Exception as e:
+        return jsonify({'message': f'json contents invalid, {e}'}), 400
+    
 

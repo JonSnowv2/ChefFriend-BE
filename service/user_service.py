@@ -33,6 +33,7 @@ def get_all_users():
     
     return jsonify(user_list), 200
 
+
 @app.route('/api/username_exists', methods=["GET", "POST"])
 @cross_origin(origin="*")
 def search_user_exist():
@@ -46,6 +47,9 @@ def search_user_exist():
         response = {'exists': False}
 
     return jsonify(response), 200
+
+
+
 
 @app.route('/api/return_user', methods=['GET', 'POST'])
 @cross_origin(origin="*")
@@ -164,7 +168,6 @@ def return_favorite_recipes():
     serialized_recipes = [serialize_recipe(recipe) for recipe in favorite_recipes]
 
     return jsonify({'favorite recipes': serialized_recipes}), 200
-
 
 
 
