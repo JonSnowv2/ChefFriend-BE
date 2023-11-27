@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Render Template Example</title>
+</head>
+<body>
+    <h1>Recipes</h1>
+    <ul>
+        {% for recipe in recipes %}
+            <li>{{ recipe.title, recipe.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
