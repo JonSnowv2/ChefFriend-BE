@@ -49,7 +49,7 @@ def protected_routes():
 <br>
 <br>
 
-## Be sure to check the repository with the frontend of this website - [FrontEnd](https://github.com/JonSnowv2/ChefFriend)
+## Be sure to check the repository with the frontend of this website - [Frontend](https://github.com/JonSnowv2/ChefFriend)!
 
 
 
